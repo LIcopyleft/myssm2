@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="/myssm2/js/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		/* 显示页面之前判断是否为第一页 ,是前一页 置为不可用*/
+		getUser(1, 10, null ,null,null);
+	});
+
+	function query() {
+		var queryId = document.getElementById("query_id").value;
+		var queryName = document.getElementById("query_name").value;
+		var queryTele = document.getElementById("query_tele").value;
+		console.log(queryId);
+
+		getUser(1, 10, queryId ,queryName ,queryTele);
+
+	}
+
+	function getUser(num, size, queryId , queryName , queryTele) {
+		var html;
+		var _data = {};
+		_data['pageNum'] = num;
+		_data['pageSize'] = size;
+		_data['queryId'] = queryId;
+		_data['queryName'] = queryName;
+		_data['queryTele'] = queryTele;
+		var mydata = JSON.stringify(_data);
+		// alert(mydata); 
+		/* 实现条件查询 */
+
+				$.ajax({
+					type : 'post',
+					url : '/myssm/users2',
+					contentType : 'application/json',
+					/* dataType:"json",   */
+					/* data:{
+					pageNum : num,
+						pageSize : size
+					} */
+
+					data : mydata,
+					success : function(data) {
+
+						console.log(data.list)
+						if ("success" == data.flag) {
+							var table = $("#myTable");
+							console.log(data.list);
+
+							for (var i = 0; i < data.list.length; i++) {
+								html += "<tr><td>";
+								html += data.list[i].id;
+								html += "</td><td>"
+								html += data.list[i].name
+								html += "</td><td>"
+								html += data.list[i].telephone
+								html += "</td></tr>"
+							}
+							/*  上一页 */
+
+
+							html += "<tr><td>";
+							if (data.page.pageNum == 1) {
+								html += "<a>首页</a>";
+							} else {
+								html += "<a href = 'javaScript:getUser(1,10);'>首页</a>";
+							}
+
+							html += "</td><td></td><td>"
+
+							if (data.page.pageNum == data.page.totalPage) {
+								html += "<a>尾页</a>";
+							} else {
+								html += "<a href = 'javaScript:getUser("
+										+ data.page.totalPage + ",10);'>尾页</a>";
+							}
+
+							html += "</td></tr>"
+							html += "<tr><td>";
+							if (data.page.pageNum == 1) {
+								html += "<a>BEFORE</a>";
+							} else {
+								html += "<a href = 'javaScript:getUser("
+										+ (data.page.pageNum - 1)
+										+ ",10);'>BEFORE</a>";
+							}
+							html += "</td><td>第" + data.page.pageNum
+									+ "页</td><td>"
+							if (data.page.pageNum == data.page.totalPage) {
+								html += "<a>NEXT</a>";
+							} else {
+								html += "<a href = 'javaScript:getUser("
+										+ (data.page.pageNum + 1)
+										+ ",10);'>NEXT</a>";
+							}
+							html += "</td></tr>"
+							table.html(html);
+
+						} else {
+							alert("返回错误！！");
+						}
+
+					}
+				})
+			
+				
+				
+	}
+</script>
+
+</head>
+<body>
+
+	id&nbsp<input type="text" id="query_id" autocomplete="off">&nbsp&nbsp
+	name&nbsp<input type="text" id="query_name" autocomplete="off">&nbsp&nbsp
+	telephone&nbsp<input type="text" id="query_tele" autocomplete="off">&nbsp
+	<input type="button" id="butt" value="查询" onclick="query()" />
+
+	<table id="myTable" border="1px" width="500px" hight=auto>
+		<tr>
+			<td>ID</td>
+			<td>Name</td>
+			<td>Telephone</td>
+		</tr>
+	</table>
+</body>
+</html>

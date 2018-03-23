@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style type="text/css">
+#data {
+	color: red;
+	border: solid;
+	text-align: center;
+}
+
+a {
+	text-decoration: none;
+}
+</style>
+</head>
+<body onLoad="Page(1,10);">
+
+	<table width="60%" align="right">
+		<tr>
+			<td><div id="con" name="con"></div></td>
+		</tr>
+	</table>
+
+<script>
+
+//原理：所有数据已加载好，js通过遍历部分显示，实现分页效果html代码
+
+// 分页函数
+// pno--页数
+// size--每页显示记录数
+// 分页部分是从真实数据行开始，因而存在加减某个常数，以确定真正的记录数
+function Page(pno,size){
+//　　var data = document.getElementById("data");  获取 数据
+$.ajax({
+            type:'post',
+            url:'/myssm/users2',
+    	 	dataType:"json",      
+    	 	data:{
+    			pageNum : pno,
+         		pageSize : size
+    	 	},
+             success:function(data){
+            	 
+            	 console.log(data.list)
+            	 
+            	 if("success" == data.flag){
+            		 var table = $("#myTable");
+            		 
+            		 console.log(data.list);
+            		 var html;
+            		　var num = 100;//表格所有行数(所有记录数)
+            		　　console.log(num);
+            		　　var totalPage = 0;//总页数
+            		　　var pageSize = size;//每页显示行数
+            		//总共分几页
+            		　　if(num/pageSize > parseInt(num/pageSize)){
+            		　　　　totalPage=parseInt(num/pageSize)+1;
+            		　　}else{
+            		　　　　totalPage=parseInt(num/pageSize);
+            		　　}
+            		//当前页数
+            		　　var currentPage = pno;
+            		　　var startRow = (currentPage - 1) * pageSize+1;//开始显示的行
+            		　　var endRow = currentPage * pageSize;//结束显示的行
+            		　　endRow = (endRow > num)? num : endRow; //三目运算符，
+            		　　console.log(endRow);//控制台打印出结束的行
+            		
+            		　for(var i=0;i<data.list.length;i++){
+            		　　　　var irow = data.list[i];
+            		　　　　if(i>startRow && i<=endRow){
+            		　　　　　　irow.style.display = "block";
+            		　　　　}else{
+            		　　　　　　irow.style.display = "none";
+            		　　　　}
+		           		 html+= "<tr><td>";
+		       			 html += data.list[i].id;
+		       			 html += "</td><td>"
+		       			 html += data.list[i].name
+		       			 html += "</td><td>"
+		           		 html += data.list[i].telephone
+		       			 html += "</td></tr>"
+            		　　}
+            		　/* 　var pageEnd = document.getElementById("pageEnd");
+            		　　var tempStr = "共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页";
+            		//判断页数>1时
+            		　　if(currentPage>1){
+            		　　　　tempStr += "<a href=\"#\" onClick=\"Page("+(1)+","+size+")\">首页</a>";
+            		　　　　tempStr += "<a href=\"#\" onClick=\"Page("+(currentPage-1)+","+size+")\"><上一页</a>"
+            		　　}else{
+            		　　　　tempStr += "首页";
+            		　　　　tempStr += "<上一页";
+            		　　}
+            		//判断页数<总页数时
+            		　　if(currentPage<totalPage){
+            		　　　　tempStr += "<a href=\"#\" onClick=\"Page("+(currentPage+1)+","+size+")\">下一页></a>";
+            		　　　　tempStr += "<a href=\"#\" onClick=\"Page("+(totalPage)+","+size+")\">尾页</a>";
+            		　　}else{
+            		　　　　tempStr += "下一页>";
+            		　　　　tempStr += "尾页";
+            		　　}
+            		　　document.getElementById("con").innerHTML = tempStr; */
+            	 }
+             }
+            		 /* 
+            		 for(var i =0 ; i < data.list.length ;i++){
+            			 html+= "<tr><td>";
+            			 html += data.list[i].id;
+            			 html += "</td><td>"
+            			 html += data.list[i].name
+            			 html += "</td><td>"
+                		html += data.list[i].telephone
+            			 html += "</td></tr>"
+            		 } */
+/* ************************* */	
+　
+
+//遍历显示数据实现分页
+　
+</script>
+</body>
+</html>

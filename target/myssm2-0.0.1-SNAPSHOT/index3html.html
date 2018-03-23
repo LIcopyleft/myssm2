@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"> 
+<title>Insert title here</title>
+<script src="/myssm/js/jquery.min.js"></script>
+<script type="text/javascript">  
+    $(document).ready(function(){
+    	/* 显示页面之前判断是否为第一页 ,是前一页 置为不可用*/
+    	
+		
+    	getUser(1,10);
+    	
+    	
+    	
+    });
+    
+    function getUser( num, size){
+        $.ajax({
+            type:'post',
+            url:'/myssm/users2',
+    	 	dataType:"json",      
+    	 	data:{
+    			pageNum : num,
+         		pageSize : size
+    	 	},
+             success:function(data){
+            	 
+            	 console.log(data.list)
+            	 
+            	 if("success" == data.flag){
+            		 var table = $("#myTable");
+            		 
+            		 console.log(data.list);
+            		 var html;
+            		 
+            		 for(var i =0 ; i < data.list.length ;i++){
+            			 html+= "<tr><td>";
+            			 html += data.list[i].id;
+            			 html += "</td><td>"
+            			 html += data.list[i].name
+            			 html += "</td><td>"
+                		html += data.list[i].telephone
+            			 html += "</td></tr>"
+            		 }
+            	
+            		
+            		 html+= "<tr><td>";
+        			 html += "<a href = 'javaScript:getUser("+(data.page.pageNum-1)+",10);'>首页</a>";
+        			 html += "</td><td>"
+        			html += "<a href = 'javaScript:getUser(30),10);'>尾页</a>";
+        			 html += "</td></tr>"
+            		 
+            		 html+= "<tr><td>";
+        			 html += "<a href = 'javaScript:getUser("+(data.page.pageNum-1)+",10);'>BEFORE</a>";
+        			 html += "</td><td>"
+        			html += "<a href = 'javaScript:getUser("+(data.page.pageNum+1)+",10);'>NEXT</a>";
+        			 html += "</td></tr>"
+        			 
+        			 
+            		 table.html(html);
+            		 
+            	 }else{
+            		 alert("返回错误！！");
+            	 }
+            	 
+             }
+    	 })
+    }
+    
+</script>
+
+</head>
+<body>
+	<table id= "myTable" border="1px" width="200px" hight=auto>
+		<tr>
+			<td>ID</td>
+			<td>Name</td>
+			<td>Telephone</td>
+		</tr>
+	</table>
+</body>
+</html>

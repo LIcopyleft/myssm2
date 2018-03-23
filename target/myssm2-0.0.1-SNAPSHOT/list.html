@@ -1,0 +1,43 @@
+    <!DOCTYPE html>  
+    <html>  
+        <head>  
+            <meta charset="utf-8">  
+            <title></title>  
+                <link rel="stylesheet" type="text/css" href="/myssm/css/easyui.css">  
+         
+        <link rel="stylesheet" type="text/css" href="/myssm/css/icon.css">  
+        <script type="text/javascript" src="/myssm/js/jquery.min.js"></script>  
+        <script type="text/javascript" src="/myssm/js/jquery.easyui.min.js"></script>  
+        
+        </head>  
+        <body>  
+              
+           
+    <table id="dg" class="easyui-datagrid" style="width:100%;">  
+    </table>  
+      
+     <script type="text/javascript">  
+        $('#dg').datagrid({  
+           url:'/myssm/easy/users',//数据请求地址  
+           toolbar:'#toolbar',// 数据网格工具栏 比如添加 修改  
+           pagination:true,//分页显示  
+           fitColumns:true,//自动适应宽度  
+           autoRowHeight:true,//自动行高度  
+           nowrap:true,//设置为true 有利于提高性能  
+           idField:'id',//字段标识  
+          
+           singleSelect:true,//只允许选择一行  
+           //pageNumber:1,//初始化页面数量  
+           pageSize:10,//初始化显示条数  
+           pageList:[10,20,30],//分页列表  
+            columns:[[  
+                {field:'id',title:'id',width:100},  
+                {field:'name',title:'姓名',width:100},  
+                {field:'telephone',title:'电话',width:100,align:'center'}  
+            ]]  
+        });  
+  
+        </script>  
+         
+    </body>  
+    </html>  
